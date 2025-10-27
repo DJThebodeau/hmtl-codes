@@ -1,9 +1,3 @@
- (cd "$(git rev-parse --show-toplevel)" && git apply --3way <<'EOF' 
-diff --git a/Before&After-Slider b/Before&After-Slider
-index d86e7a0addd75783a8fb60101622b4bcd0858481..d1a4b94ecd8259ae96e32ad51e517ac56ecd8d48 100644
---- a/Before&After-Slider
-+++ b/Before&After-Slider
-@@ -1,67 +1,65 @@
  <div class="ba" data-initial="50" aria-label="Before and After Image Comparison">
              <img class="ba-img ba-before" src="/web/image/16911-65d0f0a4/Nudestix-Wall_Graphic_3.jpg" alt="Before" loading="lazy">
              <div class="ba-after-wrap" aria-hidden="true">
@@ -77,6 +71,3 @@ index d86e7a0addd75783a8fb60101622b4bcd0858481..d1a4b94ecd8259ae96e32ad51e517ac5
      window.addEventListener('resize', () => setPct(Number(range.value)), {passive:true});
    }
    document.querySelectorAll('.ba').forEach(init);
- 
-EOF
-)
