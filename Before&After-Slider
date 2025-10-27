@@ -1,0 +1,69 @@
+<div class="ba" data-initial="50" aria-label="Before and After Image Comparison">
+            <img class="ba-img ba-before" src="/web/image/16911-65d0f0a4/Nudestix-Wall_Graphic_3.jpg" alt="Before" loading="lazy">
+            <div class="ba-after-wrap" aria-hidden="true">
+              <img class="ba-img ba-after" src="/web/image/16910-2ae7ff4b/Nudestix-Graphic_2.jpg" alt="After" loading="lazy">
+            </div>
+            <input class="ba-range" type="range" min="0" max="100" step="1" value="50" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-label="Reveal After Image">
+            <div class="ba-handle" aria-hidden="true">
+              <span class="ba-knob"></span>
+            </div>
+          </div>
+          <style>
+/* Scoped, low-risk styles */
+.ba{position:relative;width:100%;max-width:300px;margin:1rem auto;user-select:none;touch-action:none}
+.ba-img{display:block;width:100%;height:auto;pointer-events:none}
+.ba-after-wrap{position:absolute;inset:0;width:50%;overflow:hidden}
+.ba-range{position:absolute;inset:0;width:100%;height:100%;appearance:none;background:transparent;margin:0;border:0;outline:none;cursor:ew-resize}
+.ba-range::-webkit-slider-thumb{appearance:none;width:0;height:0}
+.ba-range::-moz-range-thumb{width:0;height:0;border:0}
+.ba-range::-ms-thumb{width:0;height:0;border:0}
+.ba-handle{position:absolute;top:0;bottom:0;left:50%;width:0;transform:translateX(-50%);pointer-events:none}
+.ba-handle::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;transform:translateX(-50%);
+  background:rgba(255,255,255,.9);box-shadow:0 0 0 1px rgba(0,0,0,.3)}
+.ba-knob{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:36px;height:36px;border-radius:999px;
+  background:rgba(255,255,255,.96);box-shadow:0 2px 6px rgba(0,0,0,.25),inset 0 0 0 1px rgba(0,0,0,.25)}
+.ba-knob::before,.ba-knob::after{content:"";position:absolute;top:50%;width:8px;height:8px;border-top:2px solid #333;border-right:2px solid #333;opacity:.9}
+.ba-knob::before{left:8px;transform:translateY(-50%) rotate(225deg)}
+.ba-knob::after{right:8px;transform:translateY(-50%) rotate(45deg)}
+.ba .ba-range:focus-visible~.ba-handle .ba-knob{box-shadow:0 0 0 3px rgba(0,123,255,.35),0 2px 6px rgba(0,0,0,.25),inset 0 0 0 1px rgba(0,0,0,.25)}
+/* Optional: ensure mismatched aspect images still fill area nicely */
+.ba-after{width:100%;height:100%;object-fit:cover}
+</style>
+          <script>
+(function(){
+  function init(root){
+    const afterWrap = root.querySelector('.ba-after-wrap');
+    const handle = root.querySelector('.ba-handle');
+    const range = root.querySelector('.ba-range');
+    const start = Number(root.getAttribute('data-initial')) || Number(range.value) || 50;
+    function setPct(p){
+      const v = Math.max(0, Math.min(100, p|0));
+      afterWrap.style.width = v + '%';
+      handle.style.left = v + '%';
+      range.value = v;
+      range.setAttribute('aria-valuenow', String(v));
+    }
+    function pctFromClientX(x){
+      const r = root.getBoundingClientRect();
+      return ((x - r.left) / r.width) * 100;
+    }
+    // Drag anywhere on the slider (pointer events cover mouse+touch)
+    function down(e){
+      e.preventDefault();
+      root.setPointerCapture && root.setPointerCapture(e.pointerId);
+      move(e);
+      window.addEventListener('pointermove', move);
+      window.addEventListener('pointerup', up, {once:true});
+    }
+    function move(e){ setPct(pctFromClientX(e.clientX)); }
+    function up(){ window.removeEventListener('pointermove', move); }
+    range.addEventListener('input', e => setPct(Number(e.target.value)));
+    root.addEventListener('pointerdown', down);
+    // Init position
+    setPct(start);
+    // Recompute on resize to keep behavior consistent
+    window.addEventListener('resize', () => setPct(Number(range.value)), {passive:true});
+  }
+  document.querySelectorAll('.ba').forEach(init);
+})();
+</script>
